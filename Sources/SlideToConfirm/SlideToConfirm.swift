@@ -1,11 +1,7 @@
 import SwiftUI
 
-#if os(iOS)
-import CoreHaptics
-import UIKit
-#endif
-
 /// Generic slide-to-confirm control. No domain names — callers supply the title.
+/// Callers own side effects such as haptics inside `action`.
 public struct SlideToConfirm: View {
     public var title: String
     public var isEnabled: Bool
@@ -75,7 +71,6 @@ public struct SlideToConfirm: View {
         .accessibilityAddTraits(.isButton)
         .accessibilityAction {
             guard canInteract else { return }
-            SlideHaptic.buttonPress()
             Task {
                 await action()
                 reset()
@@ -121,7 +116,6 @@ public struct SlideToConfirm: View {
 
     private func complete(maxOffset: CGFloat) async {
         dragOffset = maxOffset
-        SlideHaptic.buttonPress()
         await action()
         reset()
     }
@@ -132,28 +126,6 @@ public struct SlideToConfirm: View {
         }
     }
 }
-
-#if os(iOS)
-@MainActor
-private enum SlideHaptic {
-    private final class Storage {
-        @AppStorage("haptic_button_press") var enabled = true
-    }
-
-    private static let storage = Storage()
-    private static let impact = UIImpactFeedbackGenerator(style: .heavy)
-
-    static func buttonPress() {
-        guard storage.enabled else { return }
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-        impact.impactOccurred()
-    }
-}
-#else
-private enum SlideHaptic {
-    static func buttonPress() {}
-}
-#endif
 
 #Preview {
     SlideToConfirm(title: SlideToConfirm.slideToOpenTitle) {
