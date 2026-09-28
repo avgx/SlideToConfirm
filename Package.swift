@@ -1,10 +1,14 @@
 // swift-tools-version: 6.2
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "SlideToConfirm",
+    defaultLocalization: "en",
+    platforms: [
+        .iOS(.v15),
+        .macOS(.v13),
+    ],
     products: [
         .library(
             name: "SlideToConfirm",
@@ -14,6 +18,7 @@ let package = Package(
     targets: [
         .target(
             name: "SlideToConfirm",
+            resources: [.process("Resources")],
             swiftSettings: [
                 .enableUpcomingFeature("ApproachableConcurrency"),
             ],

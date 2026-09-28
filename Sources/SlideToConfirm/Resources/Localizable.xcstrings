@@ -1,0 +1,17 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "slide-to-open" : {
+      "comment" : "Slide control title for opening a relay",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slide to open"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
